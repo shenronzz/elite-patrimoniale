@@ -297,7 +297,7 @@
   if (!isStandalone && !localStorage.getItem('installDismissed')) {
     if (isIOS) {
       document.getElementById('install-banner').classList.add('show');
-      document.getElementById('install-text-sub').textContent = 'Appuyez sur Partager puis "Sur l'écran d'accueil"';
+      document.getElementById('install-text-sub').textContent = "Appuyez sur Partager puis 'Sur l'écran d'accueil'";
       document.getElementById('btn-install-trigger').style.display = 'none';
     } else {
       window.addEventListener('beforeinstallprompt', (e) => {
@@ -308,7 +308,7 @@
       setTimeout(() => {
         if (!deferredPrompt && !isStandalone && !localStorage.getItem('installDismissed')) {
           document.getElementById('install-banner').classList.add('show');
-          document.getElementById('install-text-sub').textContent = isAndroid ? 'Appuyez sur ⋮ puis "Ajouter à l'écran d'accueil"' : 'Cliquez sur ⋮ puis "Installer Elite Patrimoniale"';
+          document.getElementById('install-text-sub').textContent = isAndroid ? "Appuyez sur ⋮ puis 'Ajouter à l'écran d'accueil'" : 'Cliquez sur ⋮ puis "Installer Elite Patrimoniale"';
           document.getElementById('btn-install-trigger').style.display = 'none';
         }
       }, 3000);
