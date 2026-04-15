@@ -4,7 +4,7 @@
   "description": "Espace Associés - Mon Patrimoine",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FFFFFF",
+  "background_color": "#1E2D3A",
   "theme_color": "#1E2D3A",
   "orientation": "portrait",
   "icons": [
