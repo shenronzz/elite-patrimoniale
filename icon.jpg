@@ -1,0 +1,22 @@
+{
+  "name": "Elite Patrimoniale",
+  "short_name": "Elite Pat.",
+  "description": "Espace Associés - Mon Patrimoine",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1E2D3A",
+  "theme_color": "#1E2D3A",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/shenronzz/mes-images/refs/heads/main/logo-web-transparent%20EP%20et%20titre.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/shenronzz/mes-images/refs/heads/main/logo-web-transparent%20EP%20et%20titre.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
