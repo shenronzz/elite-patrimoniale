@@ -19,12 +19,45 @@
 
   // PWA Install
   let deferredPrompt = null;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById('install-banner').classList.add('show');
-  });
+  // Ne pas afficher si déjà installé ou déjà refusé
+  if (!isStandalone && !localStorage.getItem('installDismissed')) {
+    if (isIOS) {
+      // Sur iOS afficher directement le message
+      document.getElementById('install-banner').classList.add('show');
+      document.getElementById('install-text-main').textContent = '📱 Installer l'application';
+      document.getElementById('install-text-sub').textContent = 'Appuyez sur le bouton Partager puis "Sur l'écran d'accueil"';
+      document.getElementById('btn-install-trigger').style.display = 'none';
+    } else if (isAndroid) {
+      // Sur Android essayer beforeinstallprompt sinon afficher instructions
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('install-banner').classList.add('show');
+        document.getElementById('install-text-sub').textContent = 'Accédez à votre espace depuis votre écran d'accueil';
+        document.getElementById('btn-install-trigger').style.display = 'inline-block';
+      });
+
+      // Si après 3 secondes pas de prompt, afficher instructions manuelles
+      setTimeout(() => {
+        if (!deferredPrompt && !isStandalone) {
+          document.getElementById('install-banner').classList.add('show');
+          document.getElementById('install-text-sub').textContent = 'Appuyez sur ⋮ puis "Ajouter à l'écran d'accueil"';
+          document.getElementById('btn-install-trigger').style.display = 'none';
+        }
+      }, 3000);
+    } else {
+      // Sur PC
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('install-banner').classList.add('show');
+      });
+    }
+  }
 
   document.getElementById('btn-install-trigger').addEventListener('click', async () => {
     if (!deferredPrompt) return;
@@ -42,11 +75,6 @@
   function dismissInstall() {
     document.getElementById('install-banner').classList.remove('show');
     localStorage.setItem('installDismissed', '1');
-  }
-
-  // Ne plus afficher si déjà refusé
-  if (localStorage.getItem('installDismissed')) {
-    document.getElementById('install-banner').classList.remove('show');
   }
 
 </script>
@@ -63,12 +91,45 @@
 
   // PWA Install
   let deferredPrompt = null;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById('install-banner').classList.add('show');
-  });
+  // Ne pas afficher si déjà installé ou déjà refusé
+  if (!isStandalone && !localStorage.getItem('installDismissed')) {
+    if (isIOS) {
+      // Sur iOS afficher directement le message
+      document.getElementById('install-banner').classList.add('show');
+      document.getElementById('install-text-main').textContent = '📱 Installer l'application';
+      document.getElementById('install-text-sub').textContent = 'Appuyez sur le bouton Partager puis "Sur l'écran d'accueil"';
+      document.getElementById('btn-install-trigger').style.display = 'none';
+    } else if (isAndroid) {
+      // Sur Android essayer beforeinstallprompt sinon afficher instructions
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('install-banner').classList.add('show');
+        document.getElementById('install-text-sub').textContent = 'Accédez à votre espace depuis votre écran d'accueil';
+        document.getElementById('btn-install-trigger').style.display = 'inline-block';
+      });
+
+      // Si après 3 secondes pas de prompt, afficher instructions manuelles
+      setTimeout(() => {
+        if (!deferredPrompt && !isStandalone) {
+          document.getElementById('install-banner').classList.add('show');
+          document.getElementById('install-text-sub').textContent = 'Appuyez sur ⋮ puis "Ajouter à l'écran d'accueil"';
+          document.getElementById('btn-install-trigger').style.display = 'none';
+        }
+      }, 3000);
+    } else {
+      // Sur PC
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('install-banner').classList.add('show');
+      });
+    }
+  }
 
   document.getElementById('btn-install-trigger').addEventListener('click', async () => {
     if (!deferredPrompt) return;
@@ -86,11 +147,6 @@
   function dismissInstall() {
     document.getElementById('install-banner').classList.remove('show');
     localStorage.setItem('installDismissed', '1');
-  }
-
-  // Ne plus afficher si déjà refusé
-  if (localStorage.getItem('installDismissed')) {
-    document.getElementById('install-banner').classList.remove('show');
   }
 
 </script>
@@ -1208,12 +1264,45 @@
 
   // PWA Install
   let deferredPrompt = null;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById('install-banner').classList.add('show');
-  });
+  // Ne pas afficher si déjà installé ou déjà refusé
+  if (!isStandalone && !localStorage.getItem('installDismissed')) {
+    if (isIOS) {
+      // Sur iOS afficher directement le message
+      document.getElementById('install-banner').classList.add('show');
+      document.getElementById('install-text-main').textContent = '📱 Installer l'application';
+      document.getElementById('install-text-sub').textContent = 'Appuyez sur le bouton Partager puis "Sur l'écran d'accueil"';
+      document.getElementById('btn-install-trigger').style.display = 'none';
+    } else if (isAndroid) {
+      // Sur Android essayer beforeinstallprompt sinon afficher instructions
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('install-banner').classList.add('show');
+        document.getElementById('install-text-sub').textContent = 'Accédez à votre espace depuis votre écran d'accueil';
+        document.getElementById('btn-install-trigger').style.display = 'inline-block';
+      });
+
+      // Si après 3 secondes pas de prompt, afficher instructions manuelles
+      setTimeout(() => {
+        if (!deferredPrompt && !isStandalone) {
+          document.getElementById('install-banner').classList.add('show');
+          document.getElementById('install-text-sub').textContent = 'Appuyez sur ⋮ puis "Ajouter à l'écran d'accueil"';
+          document.getElementById('btn-install-trigger').style.display = 'none';
+        }
+      }, 3000);
+    } else {
+      // Sur PC
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('install-banner').classList.add('show');
+      });
+    }
+  }
 
   document.getElementById('btn-install-trigger').addEventListener('click', async () => {
     if (!deferredPrompt) return;
@@ -1233,18 +1322,13 @@
     localStorage.setItem('installDismissed', '1');
   }
 
-  // Ne plus afficher si déjà refusé
-  if (localStorage.getItem('installDismissed')) {
-    document.getElementById('install-banner').classList.remove('show');
-  }
-
 </script>
 
 <!-- INSTALL BANNER -->
 <div id="install-banner">
   <div class="install-text">
-    <strong>📱 Installer l'application</strong>
-    <span>Accédez à votre espace depuis votre écran d'accueil</span>
+    <strong id="install-text-main">📱 Installer l'application</strong>
+    <span id="install-text-sub">Accédez à votre espace depuis votre écran d'accueil</span>
   </div>
   <button class="btn-install" id="btn-install-trigger">Installer</button>
   <button class="btn-install-close" onclick="dismissInstall()">✕</button>
