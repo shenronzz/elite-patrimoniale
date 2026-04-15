@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,6 +7,16 @@
   <title>Elite Patrimoniale — Espace Associés</title>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+
+  // Enregistrement du Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('SW enregistré:', reg.scope))
+        .catch(err => console.log('SW erreur:', err));
+    });
+  }
+
   // PWA Install
   let deferredPrompt = null;
 
@@ -40,6 +51,16 @@
 
 </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js">
+
+  // Enregistrement du Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('SW enregistré:', reg.scope))
+        .catch(err => console.log('SW erreur:', err));
+    });
+  }
+
   // PWA Install
   let deferredPrompt = null;
 
@@ -1173,6 +1194,16 @@
   function fmtPct(val) {
     if (val === null || val === undefined || val === '') return '0,00 %';
     return parseFloat(val).toFixed(2).replace('.', ',') + ' %';
+  }
+
+
+  // Enregistrement du Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('SW enregistré:', reg.scope))
+        .catch(err => console.log('SW erreur:', err));
+    });
   }
 
   // PWA Install
