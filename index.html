@@ -380,7 +380,7 @@
 
     const { data: livrets } = await sb.from('livret spéciaux alban').select('*').eq('email', user.email.toLowerCase()).order('id');
     if (livrets && livrets.length > 0) {
-      const emojis = ['🌳','🐝','🪰','🌿','🚗','🍳'];
+      const emojis = ['','','','','',''];
       document.getElementById('livrets-grid').innerHTML = livrets.map((l,i) => `
         <div class="livret-card">
           <div class="livret-num">Livret ${i+1}</div>
