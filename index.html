@@ -565,7 +565,7 @@
 
     // Envoyer email via EmailJS
     try {
-      await emailjs.send('service_ojf34oj', 'c2wp9ra', {
+      await emailjs.send('service_ojf34oj', 'template_15n7lc8', {
         nom: currentUser ? currentUser.nom : '',
         email: currentUser ? currentUser.email : '',
         montant: parseFloat(montant).toLocaleString('fr-FR', {minimumFractionDigits: 2}) + ' €',
