@@ -109,7 +109,11 @@
     .iban { font-family:'Libre Baskerville',serif; font-size:1.05rem; color:var(--slate-dark); letter-spacing:0.04em; margin:6px 0; }
     .info-note { margin-top:16px; padding-top:14px; border-top:1px solid var(--border-light); font-size:0.78rem; color:var(--text-light); font-style:italic; }
     .contact-btn { background:none; border:none; color:var(--crimson); cursor:pointer; font-family:'Lato',sans-serif; font-size:0.88rem; text-decoration:underline; padding:0; }
-    #contact-modal { display:none; position:fixed; inset:0; background:rgba(30,45,58,0.75); z-index:200; align-items:center; justify-content:center; padding:20px; }
+  
+  #retrait-modal { display:none; position:fixed; inset:0; background:rgba(30,45,58,0.75); z-index:200; align-items:center; justify-content:center; padding:20px; }
+  #retrait-modal.open { display:flex; }
+
+  #contact-modal { display:none; position:fixed; inset:0; background:rgba(30,45,58,0.75); z-index:200; align-items:center; justify-content:center; padding:20px; }
     #contact-modal.open { display:flex; }
     .modal-card { background:var(--white); border-radius:4px; padding:50px; width:100%; max-width:480px; box-shadow:var(--shadow-lg); animation:fadeUp 0.3s ease; }
     .modal-title { font-family:'Libre Baskerville',serif; font-size:1.5rem; color:var(--slate-dark); margin-bottom:6px; }
@@ -233,6 +237,17 @@
       </div>
     </div>
     <div class="section-wrap">
+      <div class="section-title">Retrait</div>
+      <div class="info-box crimson">
+        <div class="info-box-title">Demander un retrait</div>
+        <div class="info-box-content">
+          Effectuez votre demande de retrait ci-dessous. Délai de traitement : <strong>1 semaine</strong>.<br><br>
+          <button class="btn-login" style="width:auto;padding:12px 24px;font-size:0.75rem;" onclick="openRetrait()">Faire une demande de retrait</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-wrap">
       <div class="section-title">Contact</div>
       <div class="info-box">
         <div class="info-box-title">Nous contacter</div>
@@ -249,6 +264,39 @@
     © Elite Patrimoniale — Société Civile Patrimoniale — Tous droits réservés<br>
     <a href="https://elitepatrimoniale.fr" target="_blank">elitepatrimoniale.fr</a>
   </footer>
+</div>
+
+
+<div id="retrait-modal">
+  <div class="modal-card">
+    <div class="modal-title">Demande de retrait</div>
+    <div class="modal-sub">Délai de traitement : 1 semaine</div>
+
+    <div class="input-group">
+      <label>Montant souhaité (€)</label>
+      <input type="number" id="retrait-montant" placeholder="Ex: 500" min="1" style="background:var(--cream);border:1.5px solid var(--border);border-radius:3px;padding:13px 16px;color:var(--text);font-family:Lato,sans-serif;font-size:0.95rem;outline:none;width:100%;">
+    </div>
+
+    <div class="input-group" style="margin-bottom:16px;text-align:left;">
+      <label style="display:block;font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">Source du retrait</label>
+      <select id="retrait-source" style="width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:3px;padding:13px 16px;color:var(--text);font-family:Lato,sans-serif;font-size:0.95rem;outline:none;">
+        <option value="">-- Choisissez --</option>
+        <option value="Livret boosté">💶 Livret boosté</option>
+        <option value="Capital investi">💰 Capital investi</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>Message optionnel</label>
+      <textarea id="retrait-message" placeholder="Précisions éventuelles…" style="width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:3px;padding:13px 16px;color:var(--text);font-family:Lato,sans-serif;font-size:0.95rem;resize:vertical;min-height:80px;outline:none;"></textarea>
+    </div>
+
+    <div class="modal-feedback" id="retrait-feedback"></div>
+    <div class="modal-actions">
+      <button class="btn-send" onclick="sendRetrait()">Envoyer la demande</button>
+      <button class="btn-cancel" onclick="closeRetrait()">Annuler</button>
+    </div>
+  </div>
 </div>
 
 <div id="contact-modal">
@@ -380,11 +428,10 @@
 
     const { data: livrets } = await sb.from('livret spéciaux alban').select('*').eq('email', user.email.toLowerCase()).order('id');
     if (livrets && livrets.length > 0) {
-      const emojis = ['','','','','',''];
       document.getElementById('livrets-grid').innerHTML = livrets.map((l,i) => `
         <div class="livret-card">
           <div class="livret-num">Livret ${i+1}</div>
-          <div class="livret-name">${emojis[i]||'📁'} ${l.nom_livret}</div>
+          <div class="livret-name">${l.nom_livret}</div>
           <div class="livret-value">${fmt(l.solde)} <span style="font-size:0.95rem;color:var(--text-light)">€</span></div>
         </div>
       `).join('');
@@ -468,6 +515,50 @@
       fb.textContent = '✓ Message envoyé. Nous reviendrons vers vous rapidement.';
       document.getElementById('contact-msg').value = '';
       setTimeout(closeContact, 2500);
+    }
+  }
+
+
+  function openRetrait() {
+    document.getElementById('retrait-modal').classList.add('open');
+  }
+
+  function closeRetrait() {
+    document.getElementById('retrait-modal').classList.remove('open');
+    document.getElementById('retrait-montant').value = '';
+    document.getElementById('retrait-source').value = '';
+    document.getElementById('retrait-message').value = '';
+    document.getElementById('retrait-feedback').textContent = '';
+  }
+
+  async function sendRetrait() {
+    const montant = document.getElementById('retrait-montant').value;
+    const source = document.getElementById('retrait-source').value;
+    const message = document.getElementById('retrait-message').value;
+    const fb = document.getElementById('retrait-feedback');
+
+    if (!montant || montant <= 0) { fb.textContent = 'Veuillez entrer un montant valide.'; return; }
+    if (!source) { fb.textContent = 'Veuillez choisir la source du retrait.'; return; }
+
+    fb.style.color = 'var(--text-muted)';
+    fb.textContent = 'Envoi en cours...';
+
+    const { error } = await sb.from('retraits').insert({
+      email: currentUser ? currentUser.email : '',
+      nom: currentUser ? currentUser.nom : '',
+      montant: parseFloat(montant),
+      source: source,
+      message: message,
+      statut: 'en attente'
+    });
+
+    if (error) {
+      fb.style.color = 'var(--crimson)';
+      fb.textContent = 'Erreur. Contactez-nous par email.';
+    } else {
+      fb.style.color = 'var(--success)';
+      fb.textContent = '✓ Demande envoyée ! Nous la traiterons sous 1 semaine.';
+      setTimeout(closeRetrait, 2500);
     }
   }
 
