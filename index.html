@@ -13,6 +13,7 @@
   <link rel="manifest" href="manifest.json">
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -531,6 +532,9 @@
     document.getElementById('retrait-feedback').textContent = '';
   }
 
+  // Init EmailJS
+  emailjs.init('XWs0TWNFsmq_B69lg');
+
   async function sendRetrait() {
     const montant = document.getElementById('retrait-montant').value;
     const source = document.getElementById('retrait-source').value;
@@ -543,23 +547,38 @@
     fb.style.color = 'var(--text-muted)';
     fb.textContent = 'Envoi en cours...';
 
+    // Enregistrer dans Supabase
     const { error } = await sb.from('retraits').insert({
       email: currentUser ? currentUser.email : '',
       nom: currentUser ? currentUser.nom : '',
       montant: parseFloat(montant),
       source: source,
-      message: message,
+      message: message || '',
       statut: 'en attente'
     });
 
     if (error) {
       fb.style.color = 'var(--crimson)';
       fb.textContent = 'Erreur. Contactez-nous par email.';
-    } else {
-      fb.style.color = 'var(--success)';
-      fb.textContent = '✓ Demande envoyée ! Nous la traiterons sous 1 semaine.';
-      setTimeout(closeRetrait, 2500);
+      return;
     }
+
+    // Envoyer email via EmailJS
+    try {
+      await emailjs.send('service_ojf34oj', 'c2wp9ra', {
+        nom: currentUser ? currentUser.nom : '',
+        email: currentUser ? currentUser.email : '',
+        montant: parseFloat(montant).toLocaleString('fr-FR', {minimumFractionDigits: 2}) + ' €',
+        source: source,
+        message: message || 'Aucun message'
+      });
+    } catch(e) {
+      console.log('Email error:', e);
+    }
+
+    fb.style.color = 'var(--success)';
+    fb.textContent = '✓ Demande envoyée ! Nous la traiterons sous 1 semaine.';
+    setTimeout(closeRetrait, 2500);
   }
 
   function fmt(val) {
