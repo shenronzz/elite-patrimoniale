@@ -111,6 +111,9 @@
     .info-note { margin-top:16px; padding-top:14px; border-top:1px solid var(--border-light); font-size:0.78rem; color:var(--text-light); font-style:italic; }
     .contact-btn { background:none; border:none; color:var(--crimson); cursor:pointer; font-family:'Lato',sans-serif; font-size:0.88rem; text-decoration:underline; padding:0; }
   
+  #parrainage-modal { display:none; position:fixed; inset:0; background:rgba(30,45,58,0.75); z-index:200; align-items:center; justify-content:center; padding:20px; }
+  #parrainage-modal.open { display:flex; }
+
   #retrait-modal { display:none; position:fixed; inset:0; background:rgba(30,45,58,0.75); z-index:200; align-items:center; justify-content:center; padding:20px; }
   #retrait-modal.open { display:flex; }
 
@@ -251,6 +254,26 @@
     </div>
 
     <div class="section-wrap">
+      <div class="section-title">Parrainage</div>
+      <div class="info-box" style="border-left-color:var(--crimson);">
+        <div class="info-box-title">Parrainer un proche</div>
+        <div class="info-box-content">
+          Parrainez un proche ou un ami et profitez tous les deux d'une prime de bienvenue !<br><br>
+          <span style="display:inline-flex;gap:24px;margin-bottom:16px;flex-wrap:wrap;">
+            <span style="background:rgba(139,31,47,0.08);border:1px solid rgba(139,31,47,0.2);border-radius:4px;padding:10px 16px;font-size:0.85rem;">
+              🎁 <strong style="color:var(--crimson);">50 €</strong> offerts au parrain
+            </span>
+            <span style="background:rgba(139,31,47,0.08);border:1px solid rgba(139,31,47,0.2);border-radius:4px;padding:10px 16px;font-size:0.85rem;">
+              🎁 <strong style="color:var(--crimson);">50 €</strong> offerts au filleul
+            </span>
+          </span><br>
+          <span style="font-size:0.78rem;color:var(--text-light);font-style:italic;">Prime créditée dans le fonds patrimonial après le premier investissement du filleul. Offre réservée aux associés investissant dans le fonds patrimonial.</span><br><br>
+          <button class="btn-login" style="width:auto;padding:12px 24px;font-size:0.75rem;" onclick="openParrainage()">Parrainer un proche ou un ami</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-wrap">
       <div class="section-title">Contact</div>
       <div class="info-box">
         <div class="info-box-title">Nous contacter</div>
@@ -269,6 +292,40 @@
   </footer>
 </div>
 
+
+
+<div id="parrainage-modal">
+  <div class="modal-card">
+    <div class="modal-title">Parrainer un proche</div>
+    <div class="modal-sub">Renseignez les coordonnées de la personne que vous souhaitez parrainer</div>
+
+    <div class="input-group">
+      <label>Nom du filleul</label>
+      <input type="text" id="parrainage-filleul" placeholder="Prénom et Nom" style="width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:3px;padding:13px 16px;color:var(--text);font-family:Lato,sans-serif;font-size:0.95rem;outline:none;">
+    </div>
+
+    <div class="input-group">
+      <label>Email du filleul</label>
+      <input type="email" id="parrainage-email-filleul" placeholder="email@exemple.fr" style="width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:3px;padding:13px 16px;color:var(--text);font-family:Lato,sans-serif;font-size:0.95rem;outline:none;">
+    </div>
+
+    <div class="input-group">
+      <label>Téléphone du filleul</label>
+      <input type="tel" id="parrainage-tel-filleul" placeholder="06 XX XX XX XX" style="width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:3px;padding:13px 16px;color:var(--text);font-family:Lato,sans-serif;font-size:0.95rem;outline:none;">
+    </div>
+
+    <div class="input-group">
+      <label>Message optionnel</label>
+      <textarea id="parrainage-message" placeholder="Informations complémentaires…" style="width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:3px;padding:13px 16px;color:var(--text);font-family:Lato,sans-serif;font-size:0.95rem;resize:vertical;min-height:80px;outline:none;"></textarea>
+    </div>
+
+    <div class="modal-feedback" id="parrainage-feedback"></div>
+    <div class="modal-actions">
+      <button class="btn-send" onclick="sendParrainage()">Envoyer</button>
+      <button class="btn-cancel" onclick="closeParrainage()">Annuler</button>
+    </div>
+  </div>
+</div>
 
 <div id="retrait-modal">
   <div class="modal-card">
@@ -521,6 +578,52 @@
     }
   }
 
+
+
+  function openParrainage() {
+    document.getElementById('parrainage-modal').classList.add('open');
+  }
+
+  function closeParrainage() {
+    document.getElementById('parrainage-modal').classList.remove('open');
+    document.getElementById('parrainage-filleul').value = '';
+    document.getElementById('parrainage-email-filleul').value = '';
+    document.getElementById('parrainage-tel-filleul').value = '';
+    document.getElementById('parrainage-message').value = '';
+    document.getElementById('parrainage-feedback').textContent = '';
+  }
+
+  async function sendParrainage() {
+    const filleul = document.getElementById('parrainage-filleul').value.trim();
+    const emailFilleul = document.getElementById('parrainage-email-filleul').value.trim();
+    const telFilleul = document.getElementById('parrainage-tel-filleul').value.trim();
+    const message = document.getElementById('parrainage-message').value.trim();
+    const fb = document.getElementById('parrainage-feedback');
+
+    if (!filleul) { fb.textContent = 'Veuillez renseigner le nom du filleul.'; return; }
+    if (!emailFilleul) { fb.textContent = 'Veuillez renseigner l email du filleul.'; return; }
+
+    fb.style.color = 'var(--text-muted)';
+    fb.textContent = 'Envoi en cours...';
+
+    try {
+      await emailjs.send('service_ojf34oj', 'template_vbxc9md', {
+        parrain: currentUser ? currentUser.nom : '',
+        email_parrain: currentUser ? currentUser.email : '',
+        filleul: filleul,
+        email_filleul: emailFilleul,
+        tel_filleul: telFilleul || 'Non renseigné',
+        message: message || 'Aucun message'
+      });
+
+      fb.style.color = 'var(--success)';
+      fb.textContent = '✓ Demande envoyée ! Nous contacterons votre filleul rapidement.';
+      setTimeout(closeParrainage, 2500);
+    } catch(e) {
+      fb.style.color = 'var(--crimson)';
+      fb.textContent = 'Erreur. Contactez-nous par email.';
+    }
+  }
 
   function openRetrait() {
     document.getElementById('retrait-modal').classList.add('open');
