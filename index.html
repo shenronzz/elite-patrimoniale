@@ -476,10 +476,6 @@
       const { data: params } = await sb.from('parametre livret').select('valeur').eq('cle', 'taux_livret').single();
       if (params && params.valeur) document.getElementById('taux-livret').textContent = params.valeur + ' % / an';
     } catch(e) {}
-try {
-      const { data: paramsBtc } = await sb.from('parametre livret').select('valeur').eq('cle', 'taux_livret_btc').single();
-      if (paramsBtc && paramsBtc.valeur) document.getElementById('taux-livret-btc').textContent = paramsBtc.valeur + ' % / an';
-    } catch(e) {}
     document.getElementById('user-name-header').textContent = user.nom;
     document.getElementById('welcome-name').textContent = 'Bonjour, ' + (user.nom || '').split(' ')[0];
     document.getElementById('stat-investi').innerHTML = fmt(user.capital_investi) + ' <span class="stat-unit">€</span>';
@@ -489,7 +485,6 @@ try {
     document.getElementById('stat-revenus').innerHTML = fmt(user.revenus_percus) + ' <span class="stat-unit">€</span>';
     document.getElementById('stat-anciennete').innerHTML = (user.anciennete || '0') + ' <span class="stat-unit">ans</span>';
     document.getElementById('stat-livret').textContent = fmt(user.solde_livret) + ' €';
-    document.getElementById('stat-livret-btc').textContent = fmt(user.solde_livret_btc) + ' €';
 
     const { data: livrets } = await sb.from('livret spéciaux alban').select('*').eq('email', user.email.toLowerCase()).order('id');
     if (livrets && livrets.length > 0) {
@@ -552,7 +547,6 @@ try {
     document.getElementById('login-btn').disabled = false;
     document.getElementById('livrets-section').style.display = 'none';
     document.getElementById('chart-section').style.display = 'none';
-    document.getElementById('stat-livret-btc').textContent = '— €';
     if (myChart) { myChart.destroy(); myChart = null; }
   }
 
